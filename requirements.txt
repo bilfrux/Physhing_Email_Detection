@@ -1,0 +1,16 @@
+# Dépendances du projet Phishing Email Detection
+# Installation : pip install -r requirements.txt
+
+# Manipulation de données
+numpy>=1.26
+pandas>=2.1
+
+# Machine Learning (TF-IDF, LogisticRegression, LinearSVC, métriques...)
+scikit-learn>=1.4
+
+# Visualisation
+matplotlib>=3.8
+seaborn>=0.13
+
+# Téléchargement du dataset depuis Kaggle (importdataset.py)
+kagglehub>=0.3
