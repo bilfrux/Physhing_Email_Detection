@@ -1,0 +1,8 @@
+source,n,n_malicious,pct_malicious
+CEAS_08,31781.0,15660.0,49.3
+Enron,27719.0,12713.0,45.9
+Ling,2742.0,424.0,15.5
+Nazario,1435.0,1435.0,100.0
+Nigerian_Fraud,2637.0,2637.0,100.0
+SpamAssasin,5072.0,1042.0,20.5
+TOTAL,71386.0,33911.0,47.5

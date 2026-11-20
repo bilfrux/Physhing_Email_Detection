@@ -1,0 +1,7 @@
+source,sender,receiver,date,urls,subject,body
+CEAS_08,0.0,1.2,0.0,0.0,0.1,0.0
+Enron,100.0,100.0,100.0,100.0,0.7,0.0
+Ling,100.0,100.0,100.0,100.0,2.2,0.0
+Nazario,0.0,6.1,0.1,0.0,0.3,0.1
+Nigerian_Fraud,9.9,39.7,14.5,0.0,1.2,0.0
+SpamAssasin,0.0,3.6,0.0,0.0,0.3,0.0

@@ -1,0 +1,77 @@
+{
+ "source": "AutoML v0.1 run 2 (stopped after 34 trials, 23 min of search)",
+ "best": {
+  "trial": 25,
+  "logged_cv_f1": 0.9827,
+  "recomputed_cv_f1": 0.9827,
+  "cv_f1_std": 0.0003,
+  "train_f1": 1.0,
+  "params": {
+   "text": "text_mask",
+   "ngram_max": 2,
+   "min_df": 5,
+   "max_features": 100000,
+   "use_char": true,
+   "use_stats": false,
+   "select_frac": 1.0,
+   "model": "ridge_lsq",
+   "alpha": 0.04417182364815315
+  }
+ },
+ "verified_top3": [
+  {
+   "trial": 9,
+   "logged_cv_f1": 0.9827,
+   "recomputed_cv_f1": 0.9827,
+   "cv_f1_std": 0.0004,
+   "train_f1": 0.9999,
+   "params": {
+    "text": "text_min",
+    "ngram_max": 1,
+    "min_df": 5,
+    "max_features": 50000,
+    "use_char": false,
+    "use_stats": false,
+    "select_frac": 1.0,
+    "model": "sgd_huber",
+    "alpha": 7.128188058401354e-05
+   }
+  },
+  {
+   "trial": 25,
+   "logged_cv_f1": 0.9827,
+   "recomputed_cv_f1": 0.9827,
+   "cv_f1_std": 0.0003,
+   "train_f1": 1.0,
+   "params": {
+    "text": "text_mask",
+    "ngram_max": 2,
+    "min_df": 5,
+    "max_features": 100000,
+    "use_char": true,
+    "use_stats": false,
+    "select_frac": 1.0,
+    "model": "ridge_lsq",
+    "alpha": 0.04417182364815315
+   }
+  },
+  {
+   "trial": 27,
+   "logged_cv_f1": 0.9827,
+   "recomputed_cv_f1": 0.9827,
+   "cv_f1_std": 0.0003,
+   "train_f1": 1.0,
+   "params": {
+    "text": "text_mask",
+    "ngram_max": 2,
+    "min_df": 5,
+    "max_features": 100000,
+    "use_char": true,
+    "use_stats": false,
+    "select_frac": 1.0,
+    "model": "ridge_lsq",
+    "alpha": 0.04501571612948485
+   }
+  }
+ ]
+}

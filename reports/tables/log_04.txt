@@ -1,0 +1,66 @@
+         train_f1_mean  train_f1_std  val_f1_mean  val_f1_std
+C                                                            
+0.01            0.9498        0.0008       0.9483      0.0024
+0.03            0.9614        0.0003       0.9598      0.0014
+0.10            0.9723        0.0004       0.9697      0.0018
+0.30            0.9816        0.0003       0.9777      0.0019
+1.00            0.9894        0.0003       0.9833      0.0011
+3.00            0.9956        0.0003       0.9859      0.0008
+10.00           0.9993        0.0001       0.9879      0.0005
+30.00           0.9999        0.0000       0.9885      0.0008
+100.00          1.0000        0.0000       0.9887      0.0008
+300.00          1.0000        0.0000       0.9888      0.0009
+1000.00         1.0000        0.0000       0.9887      0.0011
+argmax C = 300, 1-SE threshold = 0.9885, selected C = 30
+{
+ "dummy_most_frequent": {
+  "n": 14278,
+  "pos_rate": 0.4751,
+  "recall": 0.0,
+  "precision": 0.0,
+  "f1": 0.0,
+  "balanced_acc": 0.5,
+  "accuracy": 0.5249,
+  "fpr": 0.0,
+  "precision_at_5pct": NaN
+ },
+ "baseline_tfidf_lr_holdout": {
+  "n": 14278,
+  "pos_rate": 0.4751,
+  "recall": 0.9916,
+  "precision": 0.9897,
+  "f1": 0.9906,
+  "balanced_acc": 0.9911,
+  "accuracy": 0.9911,
+  "fpr": 0.0093,
+  "precision_at_5pct": 0.8482,
+  "roc_auc": 0.9994,
+  "pr_auc": 0.9994,
+  "brier": 0.007
+ },
+ "baseline_tfidf_lr_train": {
+  "n": 57108,
+  "pos_rate": 0.475,
+  "recall": 0.9998,
+  "precision": 0.9999,
+  "f1": 0.9999,
+  "balanced_acc": 0.9999,
+  "accuracy": 0.9999,
+  "fpr": 0.0001,
+  "precision_at_5pct": 0.9987,
+  "roc_auc": 1.0,
+  "pr_auc": 1.0,
+  "brier": 0.0006
+ }
+}
+malicious: your, 2004, you, 2005, jose, remove, sightings, site, monkey, our, life, kindly, meds, love, quality, livefilestore, viagra, here, men, urgent, investment, bank, adult, inches, guaranteed
+legit    : enron, wrote, vince, 2008, nz, opensuse, louise, thanks, rant, university, the, newsisfree, daren, uai, 713, fork, tony, 2007, edu, python, doc, perl, on, 2002, 2001
+LOSO CEAS_08 {'n': 31781, 'pos_rate': 0.4927, 'recall': 0.984, 'precision': 0.8914, 'f1': 0.9354, 'balanced_acc': 0.9338, 'accuracy': 0.933, 'fpr': 0.1164, 'precision_at_5pct': 0.3079, 'roc_auc': 0.979, 'pr_auc': 0.9727, 'brier': 0.0538}
+LOSO Enron {'n': 27719, 'pos_rate': 0.4586, 'recall': 0.9079, 'precision': 0.7688, 'f1': 0.8326, 'balanced_acc': 0.8383, 'accuracy': 0.8325, 'fpr': 0.2313, 'precision_at_5pct': 0.1712, 'roc_auc': 0.9239, 'pr_auc': 0.9167, 'brier': 0.1227}
+LOSO Ling {'n': 2742, 'pos_rate': 0.1546, 'recall': 0.9033, 'precision': 0.7584, 'f1': 0.8245, 'balanced_acc': 0.9253, 'accuracy': 0.9406, 'fpr': 0.0526, 'precision_at_5pct': 0.4746, 'roc_auc': 0.977, 'pr_auc': 0.9215, 'brier': 0.0462}
+LOSO Nazario {'n': 1435, 'pos_rate': 1.0, 'recall': 0.5853658536585366}
+LOSO Nigerian_Fraud {'n': 2637, 'pos_rate': 1.0, 'recall': 0.9916571861964354}
+LOSO SpamAssasin {'n': 5072, 'pos_rate': 0.2054, 'recall': 0.9702, 'precision': 0.6826, 'f1': 0.8014, 'balanced_acc': 0.9268, 'accuracy': 0.9012, 'fpr': 0.1166, 'precision_at_5pct': 0.3045, 'roc_auc': 0.9864, 'pr_auc': 0.9587, 'brier': 0.0727}
+random split (near-duplicates may cross) {'n': 16300, 'pos_rate': 0.519, 'recall': 0.9939, 'precision': 0.9875, 'f1': 0.9907, 'balanced_acc': 0.9902, 'accuracy': 0.9903, 'fpr': 0.0135, 'precision_at_5pct': 0.7946, 'roc_auc': 0.9995, 'pr_auc': 0.9995, 'brier': 0.0077, 'clusters_crossing_split': 1290}
+grouped split (clusters kept together) {'n': 16300, 'pos_rate': 0.519, 'recall': 0.9923, 'precision': 0.989, 'f1': 0.9907, 'balanced_acc': 0.9902, 'accuracy': 0.9903, 'fpr': 0.0119, 'precision_at_5pct': 0.8149, 'roc_auc': 0.9994, 'pr_auc': 0.9994, 'brier': 0.0076, 'clusters_crossing_split': 0}
+FINISHED

@@ -1,0 +1,7 @@
+source,raw,after_exact,after_near,pct_removed
+CEAS_08,39154,38753,31781,18.8
+Enron,29767,29379,27720,6.9
+Ling,2859,2856,2742,4.1
+Nazario,1565,1548,1435,8.3
+Nigerian_Fraud,3332,3271,2637,20.9
+SpamAssasin,5809,5691,5072,12.7

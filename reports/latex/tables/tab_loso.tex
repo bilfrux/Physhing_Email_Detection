@@ -1,0 +1,16 @@
+\begin{tabular}{lrrrrrrr}
+\toprule
+ & \multicolumn{5}{c}{Ours: TF-IDF + LR} & \multicolumn{2}{c}{Bhuiyan \& Bhuiyan 2026} \\
+\cmidrule(lr){2-6}\cmidrule(lr){7-8}
+Evaluation & Prec. & Recall & F1 & FPR (\%) & Prec.\ @5\% & F1 & FPR (\%) \\
+\midrule
+Random hold-out (ours) & 0.990 & 0.992 & 0.991 & 0.9 & 0.848 & -- & -- \\
+\midrule
+LOSO: CEAS\_08 & 0.891 & 0.984 & 0.935 & 11.6 & 0.308 & 0.899 & 11.4 \\
+LOSO: Enron & 0.769 & 0.908 & 0.833 & 23.1 & 0.171 & 0.820 & 22.7 \\
+LOSO: Ling & 0.758 & 0.903 & 0.825 & 5.3 & 0.475 & 0.837 & 5.1 \\
+LOSO: Nazario & -- & 0.585 & -- & -- & -- & -- & -- \\
+LOSO: Nigerian\_Fraud & -- & 0.992 & -- & -- & -- & -- & -- \\
+LOSO: SpamAssasin & 0.683 & 0.970 & 0.801 & 11.7 & 0.304 & 0.843 & 12.7 \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,17 @@
+{'input': 'raw text (case + punctuation kept)', 'source_accuracy': 0.9868844995447222, 'source_macro_f1': 0.973043494885748}
+{'input': 'minimal cleaning (lower-case, no punctuation)', 'source_accuracy': 0.961021222945997, 'source_macro_f1': 0.9350628996772942}
+{'input': 'masked (URL/e-mail/digits -> tokens)', 'source_accuracy': 0.9497618547313862, 'source_macro_f1': 0.9183758195445594}
+{'input': '5 style statistics only (length, case, spacing, digits, newlines)', 'source_accuracy': 0.8544512152412972, 'source_macro_f1': 0.55065057171188}
+                                                               input  source_accuracy  source_macro_f1
+0                                 raw text (case + punctuation kept)           0.9869           0.9730
+1                      minimal cleaning (lower-case, no punctuation)           0.9610           0.9351
+2                               masked (URL/e-mail/digits -> tokens)           0.9498           0.9184
+3  5 style statistics only (length, case, spacing, digits, newlines)           0.8545           0.5507
+4                                           chance (majority source)           0.4452              NaN
+{'accuracy_label_from_source_only': 0.582, 'f1_label_from_source_only': 0.2144}
+CEAS_08         uai, opensuse, python, wrote, urltoken, rant, massey, fork, ilug, meyer, tony, dev
+Enron           enron, vince, php, louise, houston, com, asp, kaminski, solicitation, paliourg, lst, href
+Ling            linguistics, language, linguistic, linguist, linguists, english, adults, html, languages, university, of, htm
+Nazario         usaa, account, dear, kindly, monkey, utf, parcel, jose, aenf, expire, app, dhl
+Nigerian_Fraud  my, name, funds, bank, me, attention, yahoo, seek, mr, ghana, sum, am
+SpamAssasin     url, nextpart, zzzzteana, rpm, date, maintainer, supplied, deathtospamdeathtospamdeathtospam, satalk, sep, sadev, razor

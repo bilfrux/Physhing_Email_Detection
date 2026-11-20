@@ -1,0 +1,12 @@
+                      n          pct_malicious       
+split              test    train          test  train
+source                                               
+CEAS_08          6356.0  25425.0          49.3   49.3
+Enron            5543.0  22176.0          45.9   45.9
+Ling              549.0   2193.0          15.5   15.5
+Nazario           287.0   1148.0         100.0  100.0
+Nigerian_Fraud    528.0   2109.0         100.0  100.0
+SpamAssasin      1015.0   4057.0          20.6   20.5
+TOTAL           14278.0  57108.0          47.5   47.5
+leakage checks passed: no shared cluster, no shared normalised text between train and test
+test share = 0.200

@@ -1,0 +1,44 @@
+search on 20000 training e-mails, 3 grouped folds, 50 trials
+trial   0 COMPLETE value=0.9779 model=logreg best=0.9779 t=7s
+trial   1 COMPLETE value=0.9789 model=linear_svm best=0.9789 t=7s
+trial   2 COMPLETE value=0.9646 model=complement_nb best=0.9789 t=8s
+trial   3 COMPLETE value=0.9757 model=sgd_huber best=0.9789 t=8s
+trial   4 COMPLETE value=0.9784 model=ridge_lsq best=0.9789 t=8s
+trial   5 COMPLETE value=0.8933 model=decision_tree best=0.9789 t=20s
+trial   6 COMPLETE value=0.9818 model=ridge_lsq best=0.9818 t=42s
+trial   7 COMPLETE value=0.9726 model=ridge_lsq best=0.9818 t=132s
+trial   8 PRUNED   value=0.925 model=logreg best=0.9818 t=147s
+trial   9 COMPLETE value=0.9827 model=sgd_huber best=0.9827 t=154s
+trial  10 PRUNED   value=0.9751 model=sgd_huber best=0.9827 t=173s
+trial  11 COMPLETE value=0.9799 model=ridge_lsq best=0.9827 t=200s
+trial  12 PRUNED   value=0.9764 model=sgd_huber best=0.9827 t=215s
+trial  13 COMPLETE value=0.9797 model=sgd_huber best=0.9827 t=291s
+trial  14 PRUNED   value=0.9555 model=ridge_lsq best=0.9827 t=307s
+trial  15 COMPLETE value=0.982 model=ridge_lsq best=0.9827 t=443s
+trial  16 PRUNED   value=0.8401 model=decision_tree best=0.9827 t=463s
+trial  17 PRUNED   value=0.9699 model=ridge_lsq best=0.9827 t=539s
+trial  18 PRUNED   value=0.9628 model=ridge_lsq best=0.9827 t=605s
+trial  19 PRUNED   value=0.9108 model=decision_tree best=0.9827 t=643s
+trial  20 COMPLETE value=0.9776 model=sgd_huber best=0.9827 t=651s
+trial  21 COMPLETE value=0.9797 model=ridge_lsq best=0.9827 t=759s
+trial  22 PRUNED   value=0.9732 model=sgd_huber best=0.9827 t=773s
+trial  23 COMPLETE value=0.9799 model=ridge_lsq best=0.9827 t=796s
+trial  24 PRUNED   value=0.9743 model=ridge_lsq best=0.9827 t=801s
+trial  25 COMPLETE value=0.9827 model=ridge_lsq best=0.9827 t=921s
+trial  26 COMPLETE value=0.9804 model=ridge_lsq best=0.9827 t=1040s
+trial  27 COMPLETE value=0.9827 model=ridge_lsq best=0.9827 t=1068s
+trial  28 COMPLETE value=0.9806 model=sgd_huber best=0.9827 t=1070s
+trial  29 COMPLETE value=0.9808 model=ridge_lsq best=0.9827 t=1075s
+trial  30 PRUNED   value=0.978 model=ridge_lsq best=0.9827 t=1149s
+trial  31 COMPLETE value=0.9814 model=ridge_lsq best=0.9827 t=1285s
+trial  32 COMPLETE value=0.9811 model=ridge_lsq best=0.9827 t=1311s
+/usr/local/lib/python3.13/site-packages/sklearn/svm/_base.py:1295: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/svm/_base.py:1295: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/svm/_base.py:1295: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  warnings.warn(
+trial  33 COMPLETE value=0.9823 model=linear_svm best=0.9827 t=1556s
+trial  34 COMPLETE value=0.9822 model=linear_svm best=0.9827 t=1770s
+trial  35 COMPLETE value=0.9821 model=logreg best=0.9827 t=1800s
+trial  36 PRUNED   value=0.9721 model=sgd_huber best=0.9827 t=1804s

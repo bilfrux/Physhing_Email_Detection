@@ -1,0 +1,13 @@
+,value
+rows_raw,82486
+extra_copies_exact,988
+dup_groups,688
+cross_source_groups,110
+label_conflict_groups,0
+rows_after_exact,81498
+clusters,71387
+rows_in_multi_clusters,13314
+multi_clusters,3203
+cross_source_clusters,341
+label_conflict_clusters,0
+largest_clusters,"[989, 987, 981, 962, 103]"

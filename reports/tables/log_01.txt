@@ -1,0 +1,57 @@
+raw rows: 82486
+                      n  n_malicious  n_legit  pct_malicious
+source                                                      
+CEAS_08         39154.0      21842.0  17312.0           55.8
+Enron           29767.0      13976.0  15791.0           47.0
+Ling             2859.0        458.0   2401.0           16.0
+Nazario          1565.0       1565.0      0.0          100.0
+Nigerian_Fraud   3332.0       3332.0      0.0          100.0
+SpamAssasin      5809.0       1718.0   4091.0           29.6
+TOTAL           82486.0      42891.0  39595.0           52.0
+                sender  receiver   date   urls  subject  body
+source                                                       
+CEAS_08            0.0       1.2    0.0    0.0      0.1   0.0
+Enron            100.0     100.0  100.0  100.0      0.7   0.0
+Ling             100.0     100.0  100.0  100.0      2.2   0.0
+Nazario            0.0       6.1    0.1    0.0      0.3   0.1
+Nigerian_Fraud     9.9      39.7   14.5    0.0      1.2   0.0
+SpamAssasin        0.0       3.6    0.0    0.0      0.3   0.0
+                median_chars  max_chars  ...  year_p95  pct_unparsed
+source                                   ...                        
+CEAS_08                570.0     143996  ...    2008.0           0.0
+Enron                  706.0     230120  ...       NaN         100.0
+Ling                  2027.0      28650  ...       NaN         100.0
+Nazario                720.0    4599644  ...    2022.0           1.9
+Nigerian_Fraud        2547.0     124969  ...    2007.0          14.5
+SpamAssasin           1084.0     299201  ...    2002.0           3.5
+
+[6 rows x 10 columns]
+exact duplicates: {'rows_raw': 82486, 'extra_copies_exact': 988, 'dup_groups': 688, 'cross_source_groups': 110, 'label_conflict_groups': 0}
+computing near-duplicate clusters on 81498 rows ...
+near duplicates: {'rows_after_exact': 81498, 'clusters': 71387, 'rows_in_multi_clusters': 13314, 'multi_clusters': 3203, 'cross_source_clusters': 341, 'label_conflict_clusters': 0, 'largest_clusters': [989, 987, 981, 962, 103]}
+   size   source  label                              subject_example
+0   989  CEAS_08      1                  CNN Alerts: My Custom Alert
+1   987  CEAS_08      1                         CNN.com Daily Top 10
+2   981  CEAS_08      1                         CNN.com Daily Top 10
+3   962  CEAS_08      1                         CNN.com Daily Top 10
+4   103  CEAS_08      1                  100% Money Back Guarantee. 
+5    49    Enron      1  save your money buy getting this thing here
+                  raw  after_exact  after_near  pct_removed
+source                                                     
+CEAS_08         39154        38753       31781         18.8
+Enron           29767        29379       27720          6.9
+Ling             2859         2856        2742          4.1
+Nazario          1565         1548        1435          8.3
+Nigerian_Fraud   3332         3271        2637         20.9
+SpamAssasin      5809         5691        5072         12.7
+final corpus:
+                       n  n_malicious  pct_malicious
+source                                             
+CEAS_08         31781.0      15660.0           49.3
+Enron           27719.0      12713.0           45.9
+Ling             2742.0        424.0           15.5
+Nazario          1435.0       1435.0          100.0
+Nigerian_Fraud   2637.0       2637.0          100.0
+SpamAssasin      5072.0       1042.0           20.5
+TOTAL           71386.0      33911.0           47.5
+done.

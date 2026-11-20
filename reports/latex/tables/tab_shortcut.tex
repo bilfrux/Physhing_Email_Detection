@@ -1,0 +1,11 @@
+\begin{tabular}{lrr}
+\toprule
+Input used to predict the \emph{source} (6 classes) & Accuracy (\%) & Macro-F1 (\%) \\
+\midrule
+raw text (case + punctuation kept) & 98.7 & 97.3 \\
+minimal cleaning (lower-case, no punctuation) & 96.1 & 93.5 \\
+masked (URL/e-mail/digits $\rightarrow$ tokens) & 95.0 & 91.8 \\
+5 style statistics only (length, case, spacing, digits, newlines) & 85.5 & 55.1 \\
+chance (majority source) & 44.5 & -- \\
+\bottomrule
+\end{tabular}
