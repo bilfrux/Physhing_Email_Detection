@@ -69,9 +69,9 @@ def build_features(p: dict) -> ColumnTransformer:
 def build_model(p: dict):
     m = p["model"]
     if m == "logreg":
-        return LogisticRegression(C=p["C"], solver="liblinear", max_iter=3000)
+        return LogisticRegression(C=p["C"], solver="liblinear", max_iter=3000, random_state=C.SEED)
     if m == "linear_svm":
-        return LinearSVC(C=p["C"], max_iter=5000)
+        return LinearSVC(C=p["C"], max_iter=5000, random_state=C.SEED)
     if m == "complement_nb":
         return ComplementNB(alpha=p["alpha"])
     if m == "sgd_huber":

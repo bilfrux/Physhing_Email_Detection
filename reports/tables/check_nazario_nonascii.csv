@@ -1,0 +1,3 @@
+group,n,recall,median_words_after_cleaning
+mostly ASCII,1408,0.5838,115.0
+mostly non-ASCII (>30% of characters),27,0.4074,22.0

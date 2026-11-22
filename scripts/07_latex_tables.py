@@ -183,4 +183,89 @@ Evaluation -- model & Prec. & Recall & F1 & FPR (\%) & Prec.\ @5\% \\
         f"\\newcommand{{\\nPruned}}{{{(tr.state == 'PRUNED').sum()}}}\\newcommand{{\\bestFamily}}{{{names[A['config']['model']]}}}"
         f"\\newcommand{{\\bestCV}}{{{A['cv_f1']:.4f}}}\\newcommand{{\\bestTrial}}{{{A['trial']}}}"
     )
+
+# 10 - every number quoted in the prose (main.tex, automl_discussion.tex) -> macros, so the text
+#      cannot drift from the results when the pipeline is re-run.
+SOTA = {"CEAS_08": {"f1": 0.8994, "fpr": 0.1137}, "Enron": {"f1": 0.8201, "fpr": 0.2266}, "Ling": {"f1": 0.8368, "fpr": 0.0512}, "SpamAssasin": {"f1": 0.8433, "fpr": 0.1269}}  # same as 06
+Bres = json.load(open(C.TAB / "baseline_results.json"))
+BH, BL = Bres["results"]["baseline_tfidf_lr_holdout"], Bres["loso"]
+binl = [BL[s] for s in C.BINARY_SOURCES]
+vc = pd.read_csv(C.TAB / "baseline_validation_curve.csv", index_col=0)
+mac = {
+    "baseFone": f(BH["f1"]), "baseFPR": pct(BH["fpr"]), "basePrecFive": f(BH["precision_at_5pct"]), "baseBrier": f(BH["brier"]),
+    "losoFoneMin": f(min(r["f1"] for r in binl), 2), "losoFoneMax": f(max(r["f1"] for r in binl), 2),
+    "losoFPRmin": pct(min(r["fpr"] for r in binl)), "losoFPRmax": pct(max(r["fpr"] for r in binl)),
+    "fprRatioMin": f"{min(r['fpr'] for r in binl) / BH['fpr']:.0f}", "fprRatioMax": f"{max(r['fpr'] for r in binl) / BH['fpr']:.0f}",
+    "nazRecallPct": f"{100 * BL['Nazario']['recall']:.0f}", "nazRecall": f(BL["Nazario"]["recall"], 2),
+    "nigRecallPct": f"{100 * BL['Nigerian_Fraud']['recall']:.0f}",
+    "sotaFoneDiffMax": f(max(abs(BL[s]["f1"] - SOTA[s]["f1"]) for s in SOTA), 2),
+    "sotaFPRDiffMax": f"{100 * max(abs(BL[s]['fpr'] - SOTA[s]['fpr']) for s in SOTA):.1f}",
+    "valCtrainOne": f"{vc.index[vc.train_f1_mean >= 0.99995].min():g}",
+    "valArgmaxC": f"{vc.val_f1_mean.idxmax():g}",
+}
+if (C.TAB / "automl_best_results.json").exists():
+    A = json.load(open(C.TAB / "automl_best_results.json"))
+    mac.update(autoFone=f(A["holdout"]["f1"]), autoFPR=pct(A["holdout"]["fpr"], 2), autoPrecFive=f(A["holdout"]["precision_at_5pct"]),
+               baseFPRtwo=pct(BH["fpr"], 2), autoTrainFone=f(A["train"]["f1"]),
+               autoNazRecall=f(A["loso"]["Nazario"]["recall"]), baseNazRecall=f(BL["Nazario"]["recall"]),
+               autoFoneWorse=str(sum(A["loso"][s]["f1"] < BL[s]["f1"] for s in C.BINARY_SOURCES)),
+               autoFPRworse=", ".join(esc(s) for s in C.BINARY_SOURCES if A["loso"][s]["fpr"] > BL[s]["fpr"]),
+               autoFPRbetter=", ".join(esc(s) for s in C.BINARY_SOURCES if A["loso"][s]["fpr"] < BL[s]["fpr"]))
+    for s, k in [("CEAS_08", "Ceas"), ("Enron", "Enron"), ("Ling", "Ling"), ("SpamAssasin", "Spam")]:
+        mac[f"dFone{k}"] = f"{A['loso'][s]['f1'] - BL[s]['f1']:+.3f}".replace("-", "$-$")
+if (C.TAB / "check_loso_nested_C.csv").exists():  # scripts/09_sensitivity_checks.py
+    N = pd.read_csv(C.TAB / "check_loso_nested_C.csv").set_index("held_out_source").loc[C.BINARY_SOURCES]
+    na = pd.read_csv(C.TAB / "check_nazario_nonascii.csv", index_col=0)
+    xs = pd.read_csv(C.TAB / "check_cross_source_dedup.csv", index_col=0)
+    non = na.loc[[i for i in na.index if i.startswith("mostly non")][0]]
+    asc = na.loc["mostly ASCII"]
+    mac.update(
+        nestedMaxDFone=f"{(N.f1_nested - N.f1_global).abs().max():.3f}",
+        nestedMaxDFPR=f"{100 * (N.fpr_nested - N.fpr_global).abs().max():.1f}",
+        nestedCvalues=", ".join(f"{c:g}" for c in sorted(set(pd.read_csv(C.TAB / "check_loso_nested_C.csv").C_nested))),
+        nazNonAsciiN=str(int(non.n)), nazNonAsciiPct=f"{100 * non.n / (non.n + asc.n):.1f}",
+        nazNonAsciiRecall=f(non.recall, 2), nazAsciiRecall=f(asc.recall, 2),
+        nazNonAsciiEffect=f"{100 * (asc.recall - non.recall) * non.n / (non.n + asc.n):.1f}",
+        xsSpamLost=str(int(xs.loc["SpamAssasin", "total_lost"])), xsSpamPct=f"{xs.loc['SpamAssasin', 'pct_of_source_after_exact_dedup']:.1f}",
+        xsNigLost=str(int(xs.loc["Nigerian_Fraud", "total_lost"])), xsNigPct=f"{xs.loc['Nigerian_Fraud', 'pct_of_source_after_exact_dedup']:.1f}",
+    )
+(OUT / "val_text.tex").write_text("".join(f"\\newcommand{{\\{k}}}{{{v}}}\n" for k, v in mac.items()))
+print("wrote val_text", mac)
+
+# 9 - uncertainty (scripts/08_uncertainty.py)
+if (C.TAB / "uncertainty_holdout.csv").exists():
+    U = pd.read_csv(C.TAB / "uncertainty_holdout.csv").set_index(["model", "metric"])
+    def ci(model, m, d=3, scale=1):
+        r = U.loc[(model, m)]
+        return f"{scale * r.estimate:.{d}f} [{scale * r.ci_low:.{d}f}, {scale * r.ci_high:.{d}f}]"
+    rows = [f"{lab} & {ci(m, 'precision')} & {ci(m, 'recall')} & {ci(m, 'f1')} & {ci(m, 'fpr', 2, 100)} \\\\"
+            for m, lab in [("baseline", "Baseline (TF-IDF + LR)"), ("automl", "AutoML v0.1 best")]]
+    rows.append(r"\midrule")
+    rows.append(f"AutoML $-$ baseline (paired) & {ci('diff', 'precision')} & {ci('diff', 'recall')} & {ci('diff', 'f1')} & {ci('diff', 'fpr', 2, 100)} \\\\")
+    write("tab_uncertainty", r"""\begin{tabular}{lllll}
+\toprule
+Hold-out test & Precision & Recall & F1 & FPR (\%) \\
+\midrule
+""" + "\n".join(rows) + "\n\\bottomrule\n\\end{tabular}")
+    pv = lambda m: f"{U.loc[('diff', m), 'p_value']:.3f}" if U.loc[("diff", m), "p_value"] >= 0.001 else "<0.001"
+    (OUT / "val_uncertainty.tex").write_text(
+        f"\\newcommand{{\\pDiffFone}}{{{pv('f1')}}}\\newcommand{{\\pDiffFPR}}{{{pv('fpr')}}}\\newcommand{{\\pDiffRecall}}{{{pv('recall')}}}"
+    )
+    L = pd.read_csv(C.TAB / "uncertainty_loso.csv")
+    rows = []
+    for src in C.SOURCES:
+        cells = []
+        for m in ("baseline", "automl"):
+            r = L[(L.model == m) & (L.held_out_source == src)].iloc[0]
+            rec = f"{r.recall:.3f} [{r.recall_ci_low:.3f}, {r.recall_ci_high:.3f}]"
+            fpr = "--" if pd.isna(r.get("fpr")) else f"{100 * r.fpr:.1f} [{100 * r.fpr_ci_low:.1f}, {100 * r.fpr_ci_high:.1f}]"
+            cells += [rec, fpr]
+        rows.append(f"{esc(src)} & " + " & ".join(cells) + r" \\")
+    write("tab_uncertainty_loso", r"""\begin{tabular}{lllll}
+\toprule
+& \multicolumn{2}{c}{Baseline} & \multicolumn{2}{c}{AutoML v0.1} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Held-out source & Recall & FPR (\%) & Recall & FPR (\%) \\
+\midrule
+""" + "\n".join(rows) + "\n\\bottomrule\n\\end{tabular}")
 print("done")

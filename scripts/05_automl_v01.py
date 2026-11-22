@@ -49,7 +49,6 @@ tr = df[split.split.values == "train"].reset_index(drop=True)
 te = df[split.split.values == "test"].reset_index(drop=True)
 
 # Stratified (source x label) subsample of the training split for the search.
-rng = np.random.default_rng(C.SEED)
 frac = SUBSAMPLE / len(tr)
 sub = tr.groupby(["source", "label"]).sample(frac=frac, random_state=C.SEED).reset_index(drop=True)
 folds = cv_folds(sub, n_splits=3)

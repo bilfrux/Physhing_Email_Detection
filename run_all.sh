@@ -14,4 +14,6 @@ python scripts/04_baseline.py          # TF-IDF + LR baseline, validation curve,
 python scripts/05b_recover_best.py     # replay log -> automl_trials.csv, automl_best_config.json (verified)
 python scripts/05c_eval_best.py        # best config: hold-out + LOSO
 python scripts/06_summary_figures.py   # comparison figures used in the report
-python scripts/07_latex_tables.py      # LaTeX tables from result files
+python scripts/08_uncertainty.py       # bootstrap / Wilson confidence intervals (no refit)
+python scripts/09_sensitivity_checks.py # nested-C LOSO, non-ASCII, cross-source dedup
+python scripts/07_latex_tables.py      # LaTeX tables from result files (run last)

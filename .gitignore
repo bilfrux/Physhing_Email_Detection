@@ -1,0 +1,25 @@
+# Python / environment
+.venv/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Data (licence + privacy: real people's e-mails; see data/README.md)
+data/raw/
+data/processed/
+
+# LaTeX build files
+reports/latex/*.aux
+reports/latex/*.log
+reports/latex/*.fls
+reports/latex/*.fdb_latexmk
+reports/latex/*.out
+reports/latex/*.synctex.gz
+
+# Submission archive
+*.zip
+
+# Kaggle download location (importdataset.py / demo_metrics.py)
+phishing-email-dataset/

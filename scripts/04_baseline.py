@@ -39,7 +39,7 @@ C_GRID = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000]
 
 
 def make_model(c):
-    return Pipeline([("tfidf", TfidfVectorizer(**VEC)), ("clf", LogisticRegression(C=c, solver="liblinear", max_iter=2000))])
+    return Pipeline([("tfidf", TfidfVectorizer(**VEC)), ("clf", LogisticRegression(C=c, solver="liblinear", max_iter=2000, random_state=C.SEED))])
 
 
 df = pd.read_parquet(C.PROCESSED / "corpus.parquet")
@@ -59,7 +59,7 @@ for k, (f_tr, f_va) in enumerate(cv_folds(tr, n_splits=5)):
     Xtr = vec.fit_transform(tr[TEXT].iloc[f_tr])  # fitted on the training fold ONLY
     Xva = vec.transform(tr[TEXT].iloc[f_va])
     for c in C_GRID:
-        m = LogisticRegression(C=c, solver="liblinear", max_iter=2000).fit(Xtr, tr.label.iloc[f_tr])
+        m = LogisticRegression(C=c, solver="liblinear", max_iter=2000, random_state=C.SEED).fit(Xtr, tr.label.iloc[f_tr])
         rows.append({"fold": k, "C": c, "train_f1": f1_score(tr.label.iloc[f_tr], m.predict(Xtr)), "val_f1": f1_score(tr.label.iloc[f_va], m.predict(Xva))})
 cvres = pd.DataFrame(rows)
 curve = cvres.groupby("C")[["train_f1", "val_f1"]].agg(["mean", "std"])

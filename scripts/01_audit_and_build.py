@@ -3,21 +3,22 @@
 Outputs
   reports/tables/audit_*.csv          per-source quality statistics
   reports/figures/fig1..fig4          EDA figures
-  data/processed/corpus_all.parquet   every raw row + dedup flags + cluster ids
-  data/processed/corpus.parquet       final de-duplicated corpus used for modelling
+  data/processed/corpus.parquet              final de-duplicated corpus used for modelling
+  data/processed/corpus_exact_dedup.parquet  exact-dedup only (to measure near-duplicate inflation)
 """
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib.patches import Patch
 
 from phish import config as C
-from phish.data import build_text, load_sources, near_duplicate_clusters
 from phish import viz
-import matplotlib.pyplot as plt
+from phish.data import build_text, load_sources, near_duplicate_clusters
 
 viz.setup()
 df = load_sources()
@@ -35,36 +36,31 @@ comp.to_csv(C.TAB / "audit_composition.csv")
 print(comp)
 
 # ---------------------------------------------------------------- 2. missingness
-meta_cols = ["sender", "receiver", "date", "urls", "subject", "body"]
-miss = pd.DataFrame(
-    {c: df.groupby("source")[c].apply(lambda s: s.isna().mean() * 100) if c in df else 100.0 for c in meta_cols}
-).reindex(C.SOURCES)
-# subject/body were filled with "" in load_sources -> recompute from raw emptiness
+by_src = df.groupby("source")
+miss = pd.DataFrame({c: by_src[c].apply(lambda s: s.isna().mean() * 100) for c in ["sender", "receiver", "date", "urls"]})
+# subject/body were filled with "" in load_sources -> missing = empty
 for c in ["subject", "body"]:
-    miss[c] = df.groupby("source")[c].apply(lambda s: (s.str.strip() == "").mean() * 100)
-miss = miss.round(1)
+    miss[c] = by_src[c].apply(lambda s: (s.str.strip() == "").mean() * 100)
+miss = miss.reindex(C.SOURCES).round(1)
 miss.to_csv(C.TAB / "audit_missingness_pct.csv")
 print(miss)
 
 # ---------------------------------------------------------------- 3. style / artefacts
-b = df["body"]
+body = by_src["body"]
 style = pd.DataFrame(
     {
-        "median_chars": df.groupby("source")["body"].apply(lambda s: s.str.len().median()),
-        "max_chars": df.groupby("source")["body"].apply(lambda s: s.str.len().max()),
-        "pct_truncated": df.groupby("source")["body"].apply(lambda s: (s.str.len() > C.MAX_CHARS).mean() * 100),
-        "uppercase_char_ratio_pct": df.groupby("source")["body"].apply(
-            lambda s: 100 * s.str.count(r"[A-Z]").sum() / max(1, s.str.len().sum())
-        ),
-        "pct_with_http": df.groupby("source")["body"].apply(lambda s: s.str.contains("http", case=False).mean() * 100),
-        "pct_spaced_punct": df.groupby("source")["body"].apply(lambda s: s.str.contains(r" [.,:] ").mean() * 100),
+        "median_chars": body.apply(lambda s: s.str.len().median()),
+        "max_chars": body.apply(lambda s: s.str.len().max()),
+        "pct_truncated": body.apply(lambda s: (s.str.len() > C.MAX_CHARS).mean() * 100),
+        "uppercase_char_ratio_pct": body.apply(lambda s: 100 * s.str.count(r"[A-Z]").sum() / max(1, s.str.len().sum())),
+        "pct_with_http": body.apply(lambda s: s.str.contains("http", case=False).mean() * 100),
+        "pct_spaced_punct": body.apply(lambda s: s.str.contains(r" [.,:] ").mean() * 100),
     }
 ).reindex(C.SOURCES).round(2)
 # Strip trailing RFC 2822 zone comments like "+0100 (CET)": the numeric offset already carries
 # the information, and pandas 2.x crashes on them (parses "CET" as tzlocal).
 dates = df["date"].str.replace(r"\s*\([^)]*\)\s*$", "", regex=True)
-years = pd.to_datetime(dates, errors="coerce", utc=True, format="mixed").dt.year
-df["year"] = years
+df["year"] = pd.to_datetime(dates, errors="coerce", utc=True, format="mixed").dt.year
 yr = df.groupby("source")["year"].agg(
     year_p05=lambda s: s.quantile(0.05), year_median="median", year_p95=lambda s: s.quantile(0.95), pct_unparsed=lambda s: s.isna().mean() * 100
 ).reindex(C.SOURCES).round(1)
@@ -177,9 +173,6 @@ for p, c in zip(bp["boxes"], cols):
     p.set_alpha(0.85)
 ax.set_xticks([i * 3 + 0.5 for i in range(len(C.SOURCES))], C.SOURCES)
 ax.set_ylabel("log10(characters)")
-ax.set_title("E-mail length by source and class (deduplicated corpus)")
-from matplotlib.patches import Patch
-
 ax.legend(handles=[Patch(color=viz.LEGIT, label="Legitimate"), Patch(color=viz.MALICIOUS, label="Spam / phishing")], loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=2)
 ax.set_title("E-mail length by source and class (deduplicated corpus)", pad=26)
 ax.grid(axis="x", visible=False)
@@ -204,10 +197,11 @@ plt.close(fig)
 
 # Fig 4 - year distribution per source (temporal shift)
 fig, ax = plt.subplots(figsize=(7, 2.8))
-for i, s in enumerate(["CEAS_08", "Nazario", "Nigerian_Fraud", "SpamAssasin"]):
+dated = ["CEAS_08", "Nazario", "Nigerian_Fraud", "SpamAssasin"]  # Enron and Ling have no date field
+for i, s in enumerate(dated):
     y = df[(df.source == s) & df.year.between(1995, 2023)].year
     ax.scatter(y + np.random.default_rng(0).uniform(-0.3, 0.3, len(y)), np.full(len(y), i) + np.random.default_rng(1).uniform(-0.25, 0.25, len(y)), s=2, alpha=0.15, color=viz.SERIES[i], rasterized=True)
-ax.set_yticks(range(4), ["CEAS_08", "Nazario", "Nigerian_Fraud", "SpamAssasin"])
+ax.set_yticks(range(len(dated)), dated)
 ax.set_xlabel("Year of the 'date' header (Enron and Ling have no date field)")
 ax.set_title("Collection period per source: up to 20 years apart")
 ax.grid(axis="y", visible=False)

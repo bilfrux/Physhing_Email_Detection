@@ -54,7 +54,7 @@ rows = []
 for name, (X, vec) in variants.items():
     pred = np.empty(len(tr), dtype=object)
     for f_tr, f_te in folds:
-        m = make_pipeline(vec(), LinearSVC(C=0.5))
+        m = make_pipeline(vec(), LinearSVC(C=0.5, random_state=C.SEED))
         m.fit(X.iloc[f_tr], y[f_tr])
         pred[f_te] = m.predict(X.iloc[f_te])
     rows.append({"input": name, "source_accuracy": accuracy_score(y, pred), "source_macro_f1": f1_score(y, pred, average="macro")})
@@ -63,7 +63,7 @@ for name, (X, vec) in variants.items():
 S = style_feats(tr["raw_text"])
 pred = np.empty(len(tr), dtype=object)
 for f_tr, f_te in folds:
-    m = make_pipeline(StandardScaler(), LogisticRegression(max_iter=2000))
+    m = make_pipeline(StandardScaler(), LogisticRegression(max_iter=2000, random_state=C.SEED))
     m.fit(S[f_tr], y[f_tr])
     pred[f_te] = m.predict(S[f_te])
 rows.append({"input": "5 style statistics only (length, case, spacing, digits, newlines)", "source_accuracy": accuracy_score(y, pred), "source_macro_f1": f1_score(y, pred, average="macro")})
@@ -86,7 +86,7 @@ pd.Series(src_only).to_csv(C.TAB / "shortcut_label_from_source.csv", header=["va
 # Residual source markers in the masked text: top tokens of a one-vs-rest model.
 vec = TfidfVectorizer(max_features=50000, sublinear_tf=True, min_df=3)
 Xm = vec.fit_transform(tr["text_mask"])
-clf = LinearSVC(C=0.5).fit(Xm, y)
+clf = LinearSVC(C=0.5, random_state=C.SEED).fit(Xm, y)
 vocab = np.array(vec.get_feature_names_out())
 top = {cls: ", ".join(vocab[np.argsort(clf.coef_[i])[::-1][:12]]) for i, cls in enumerate(clf.classes_)}
 pd.Series(top).to_csv(C.TAB / "shortcut_top_tokens_per_source.csv", header=["top tokens identifying the source (masked text)"])

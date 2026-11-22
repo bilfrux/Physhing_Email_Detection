@@ -66,21 +66,36 @@ base = {"text": "text_mask", "ngram_max": 1, "min_df": 5, "max_features": 50_000
 for fam, hp in [("logreg", {"C": 10.0}), ("linear_svm", {"C_svm": 1.0}), ("complement_nb", {"alpha_nb": 0.1}), ("sgd_huber", {"alpha_sgd": 1e-5}), ("ridge_lsq", {"alpha_ridge": 1.0}), ("decision_tree", {"max_depth": 30, "min_samples_leaf": 5})]:
     study.enqueue_trial({**base, "model": fam, **hp})
 
-rows = []
+rows, diverged = [], None
 for n, state, value, model in logged:
     t = study.ask()
     p = suggest(t)
     if p["model"] != model:
-        raise SystemExit(f"replay diverged at trial {n}: log says {model}, replay gives {p['model']}")
+        diverged = f"replay diverged at trial {n}: log says {model}, replay gives {p['model']}"
+        break
     if state == "COMPLETE":
         study.tell(t, value)
     else:
         t.report(value, 1)
         study.tell(t, state=optuna.trial.TrialState.PRUNED)
     rows.append({"number": n, "state": state, "value": value, **{f"params_{k}": v for k, v in p.items()}})
-print("replay consistent with the log for all", len(rows), "trials (model family matches at every step)")
-trials = pd.DataFrame(rows)
-trials.to_csv(C.TAB / "automl_trials.csv", index=False)
+
+if diverged is None:
+    print("replay consistent with the log for all", len(rows), "trials (model family matches at every step)")
+    trials = pd.DataFrame(rows)
+    trials.to_csv(C.TAB / "automl_trials.csv", index=False)
+else:
+    # The TPE replay is only bit-reproducible on the platform / library build that ran the search
+    # (tiny floating-point differences can flip a sampled category). Fall back to the parameters
+    # recovered on that platform (committed automl_trials.csv), after checking they match the log;
+    # the re-evaluation below is what actually proves they are the logged configurations.
+    print(f"WARNING: {diverged}. Using the committed reports/tables/automl_trials.csv instead.")
+    trials = pd.read_csv(C.TAB / "automl_trials.csv")
+    got = list(zip(trials.number, trials.state, trials.value.round(4), trials.params_model))
+    want = [(n, s, round(v, 4), m) for n, s, v, m in logged]
+    if got != want:
+        raise SystemExit("committed automl_trials.csv does not match the search log")
+    print(f"committed automl_trials.csv matches the log for all {len(trials)} trials")
 
 # ---- re-evaluate the top configurations on the same CV to verify the reconstruction
 df = pd.read_parquet(C.PROCESSED / "corpus.parquet")
@@ -109,7 +124,7 @@ for r in top.itertuples():
     print(check[-1], flush=True)
 
 ok = [c for c in check if abs(c["recomputed_cv_f1"] - c["logged_cv_f1"]) < 1e-4]
-print(f"{len(ok)}/{len(check)} configurations reproduce their logged score exactly")
+print(f"{len(ok)}/{len(check)} configurations reproduce their logged score (|difference| < 1e-4)")
 # Best = highest score; ties broken in favour of the ridge_lsq family as recorded, then the earliest trial.
 best = sorted(ok, key=lambda c: (-c["recomputed_cv_f1"], c["params"]["model"] != "ridge_lsq", c["trial"]))[0]
 json.dump({"source": "AutoML v0.1 run 2 (stopped after 34 trials, 23 min of search)", "best": best, "verified_top3": check},

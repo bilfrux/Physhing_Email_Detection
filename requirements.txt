@@ -1,5 +1,8 @@
-<<<<<<< HEAD
-# Tested with Python 3.13.18
+# Tested with Python 3.13
+# Install with:  python -m pip install -r requirements.txt
+# (use "python -m pip", not "pip": on some machines "pip" belongs to another Python)
+
+# Core pipeline (scripts/, src/phish/)
 scikit-learn==1.9.1
 pandas==3.0.5
 numpy==2.5.3
@@ -8,21 +11,7 @@ matplotlib==3.11.2
 optuna==5.1.0
 datasketch==2.0.0
 pyarrow==26.0.1
-=======
-# Dépendances du projet Phishing Email Detection
-# Installation : pip install -r requirements.txt
 
-# Manipulation de données
-numpy>=1.26
-pandas>=2.1
-
-# Machine Learning (TF-IDF, LogisticRegression, LinearSVC, métriques...)
-scikit-learn>=1.4
-
-# Visualisation
-matplotlib>=3.8
-seaborn>=0.13
-
-# Téléchargement du dataset depuis Kaggle (importdataset.py)
-kagglehub>=0.3
->>>>>>> refs/remotes/origin/main
+# Exploratory tools (data_profiler.py, metrics_evaluation.py) and dataset download (importdataset.py)
+seaborn==0.13.2
+kagglehub==0.3.13
