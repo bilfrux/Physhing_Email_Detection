@@ -106,3 +106,11 @@ how far it got in the log. Keep the best logged result (0.9827, ridge_lsq) and s
 **What we verified:** the replay reproduces the model family of all 34 logged trials, and the
 re-computed CV F1 of the top 3 configurations equals the logged values (0.9827). Only after this
 check was the configuration saved and evaluated.
+
+---
+
+## visualisation data
+**Auteur**: Ambroise
+**promt:** fait moi un code qui permet de faire de la visualisation de données pour m'aider à choisir un modelèle. Pour cela j'ai choisis les metrique et fait moi la matrice de confusion, le f1 score, le nombre de doublons, le nombre d'email de phising et réel, le nombre de valeurs manquant
+**output**  le code python qui m'affiche des tableaux
+
