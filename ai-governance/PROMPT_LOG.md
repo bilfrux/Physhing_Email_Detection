@@ -143,14 +143,6 @@ nested LOSO.
 
 ---
 
-### A-3: `metrics_evaluation.py`
-
-### A-4: `data_profiler.py`
-
-### A-5: `demo_metrics.py`
-
----
-
 ## Dylan
 
 ### D-1: Data leakage verification 
