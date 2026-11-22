@@ -25,5 +25,5 @@ corresponding module.
 |---|---|---|---|---|
 | Imene Khelil | | | I-1, I-2, I-3 | #1–#12 |
 | Florian | | | F-1 (to write) | (to write) |
-| Ambroise | | | A-1 (to write) | (to write) |
+| Ambroise | M1 | | A-1 (to write) | #14–#16 |
 | Dylan | | | D-1 (to write) | (to write) |
