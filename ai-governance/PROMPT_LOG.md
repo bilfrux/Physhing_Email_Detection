@@ -122,7 +122,7 @@ nested LOSO.
 
 **Prompt:** *"Make me a code that does data visualisation to help me choose a model. For that I chose the metrics and give me the confusion matrix, F1 score, number of duplicates, number of phishing and legitimate emails, and number of missing values."* ["fait moi un code qui permet de faire de la visualisation de données pour m'aider à choisir un modelèle, pour cela j'ai choisis les metrique suivante et donc fait mo matrice de confusion, f1 (+f0,5 et f2) score, le nombre de doublons, le nombre d'email de phising et réel, le nombre de valeurs manquant"]
 
-**AI output:** Python script generating comparison tables and summary metrics (including precision, recall, F1, F2, MCC, PR-AUC, ROC-AUC, FPR @ 95% recall, and a comparative table across baseline, cross-corpus, and adversarial-evasion settings), alongside data-count summaries.
+**AI output:** Python script generating comparison tables and summary metrics (including precision, recall, F1, F2, MCC, PR-AUC, ROC-AUC, FPR @ 95% recall, and a comparative table across baseline, cross-corpus, and adversarial-evasion settings), alongside data-count summaries. `metrics_evaluation.py`, `data_profiler.py`, `demo_metrics.py`
 
 **What we verified:** checked the displayed metrics and counts against the dataset/evaluation logic and verified which indicators actually help compare models rather than relying on a single score.
 
