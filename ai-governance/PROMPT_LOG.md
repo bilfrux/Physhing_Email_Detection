@@ -18,7 +18,7 @@ the table at the end, so that no AI-generated code is left undeclared.
 | A-4 | Ambroise | _to fill_ | _to fill_ | |
 | D-1 | Dylan | _to fill_ | _to fill_ | |
 | D-2 | Dylan | _to fill_ | _to fill_ | |
-| D-3 | Dylan | _to fill_ | _to fill_ | |
+| D-3 | Dylan | _to fill_ | _to fill_ | #13 |
 | D-4 | Dylan | _to fill_ | _to fill_ | |
 
 ---

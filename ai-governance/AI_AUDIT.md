@@ -5,8 +5,7 @@ literature search. Every item below is a case where the AI-generated logic was *
 how we caught it (with evidence), and the version that fixed it. Every number here can be regenerated
 with `run_all.sh`.
 
-> TODO (team): each member re-reads one item and re-runs the check that proves it (see *Evidence*),
-> so that anyone can defend it at the oral.
+> TODO (team): each member re-reads one item and re-runs the check that proves it (see *Evidence*)
 
 ---
 
@@ -143,3 +142,13 @@ with `run_all.sh`.
 | **Flaw** | After re-running the pipeline in the pinned environment (#8), several statements no longer matched the tables: Nazario recall 58 % (not 59 %), LOSO FPR 5.6–24.0 %, FPR gap to the paper 1.3 points (the claim "within 1.1 points" became **false**). The AutoML discussion also said "worse on **three** of the four binary sources" and then listed an F1 drop on **all four**. It also claimed that AutoML "trades recall for fewer false positives", but the paired bootstrap shows the FPR gain is not significant (p = 0.17). |
 | **How we caught it** | `git diff` of the regenerated tables, then a sentence-by-sentence check of every number in `main.tex`, `automl_discussion.tex` and `README.md`. |
 | **Fix** | `07_latex_tables.py` now writes every **model-result** number quoted in the prose as a LaTeX macro (`tables/val_text.tex`) and the text uses them (the data-audit counts, which only change if the data changes, stay typed and were re-checked against the audit tables); the contradiction and the FPR claim were rewritten from the macros and the confidence intervals. |
+
+## 13. Feature selection from raw text and unkown words being dropped
+
+| | |
+|---|---|
+| **AI output** | "TfidfVectorizer doesn't crash on unseen words, it silently drops them." |
+| **Flaw** | New words or words with different spellings will pass through and won't be caught by the model. |
+| **How we caught it** | Rereading the code, prompts, and outputs we realized this flaw. |
+| **Fix** | Using character n-grams to approximate words with different spellings. |
+
