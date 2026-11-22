@@ -116,22 +116,38 @@ nested LOSO.
 
 ## Ambroise
 
-### A-1: visualisation data
-**Author**: Ambroise  **Date:** 2026-11-18
+### A-1: visualisation data for model selection
 
-**Prompt:** fait moi un code qui permet de faire de la visualisation de données pour m'aider à choisir un modelèle. Pour cela j'ai choisis les metrique et fait moi la matrice de confusion, le f1 score, le nombre de doublons, le nombre d'email de phising et réel, le nombre de valeurs manquant
-**output**  le code python qui m'affiche des tableaux:
-📋 TABLEAU COMPARATIF :
-                        Model Name  Precision  Recall (TPR)  F1-Score  F2-Score      MCC    PR-AUC   ROC-AUC  FPR @ 95% Recall
-      Baseline (Al-Subaiey et al.)     0.8412        0.9350    0.8856    0.9146   0.8640    0.9577    0.9899            0.0459
-   Cross-Corpus (Test sur CEAS_08)     0.5203        0.5944    0.5549    0.5780   0.4638    0.5804    0.8634            0.5086
-Sous Attaque (Adversarial Evasion)     0.7605        0.5604    0.6453    0.5915   0.5982    0.7064    0.8779            0.3942
+**Author:** Ambroise
 
-### A-2: metrics_evaluation.py
+**Prompt:** *"Make me a code that does data visualisation to help me choose a model. For that I chose the metrics and give me the confusion matrix, F1 score, number of duplicates, number of phishing and legitimate emails, and number of missing values."* ["fait moi un code qui permet de faire de la visualisation de données pour m'aider à choisir un modelèle, pour cela j'ai choisis les metrique suivante et donc fait mo matrice de confusion, f1 (+f0,5 et f2) score, le nombre de doublons, le nombre d'email de phising et réel, le nombre de valeurs manquant"]
 
-### A-3: data_profiler.py
+**AI output:** Python script generating comparison tables and summary metrics (including precision, recall, F1, F2, MCC, PR-AUC, ROC-AUC, FPR @ 95% recall, and a comparative table across baseline, cross-corpus, and adversarial-evasion settings), alongside data-count summaries.
 
-### A-4: demo_metrics.py
+**What we verified:** checked the displayed metrics and counts against the dataset/evaluation logic and verified which indicators actually help compare models rather than relying on a single score.
+
+---
+
+### A-2: translation and rewriting in English (prompts in French, responses in English)
+
+**Author:** Ambroise
+
+**Prompt examples:**
+
+* Translation: *"Traduis ce paragraphe ... sur ... en anglais clair et naturel, tout en restant précis, corrige mes fautes d'orthographe et grammaire, tu peux changer le mot si j'ai pas utiliser le bon et réponds uniquement en anglais."*
+* Rewriting: *"Réécris ... de manière plus précise et fluide pour un rapport de machine learnig, en gardant l'exactitude et la précision, et réponds en donnant uniquement ta réponse en anglais."*
+
+**AI output:** English translations and reformulated paragraphs adapted to technical documentation and report prose, while preserving key terms and reported values.
+
+**What we verified:** re-read every translated and rewritten passage to ensure the meaning, technical accuracy, and numbers matched the French source and underlying results.
+
+---
+
+### A-3: `metrics_evaluation.py`
+
+### A-4: `data_profiler.py`
+
+### A-5: `demo_metrics.py`
 
 ---
 
