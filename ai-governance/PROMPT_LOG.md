@@ -184,3 +184,19 @@ nested LOSO.
 | `scripts/07_latex_tables.py` text macros, report and README rewording (2026-11-22) | every number of the prose generated from result files (AI_AUDIT #12) | static check: all 51 macros defined; sentences re-read against the tables |
 | `reports/latex/main.tex`, `automl_discussion.tex` (2026-11-22) | report shortened (~20 %) and rewritten in plainer English; content, tables, figures and numbers unchanged | labels, references, citations and macros checked; every sentence re-read by the team before submission |
 | `demo_metrics.py` (2026-11-22) | frozen split, no synthetic fallback, fake attack removed (AI_AUDIT #11) | old and new versions run side by side |
+**What we verified:** the replay reproduces the model family of all 34 logged trials, and the
+re-computed CV F1 of the top 3 configurations equals the logged values (0.9827). Only after this
+check was the configuration saved and evaluated.
+
+---
+
+## visualisation data
+**Auteur**: Ambroise
+**promt:** fait moi un code qui permet de faire de la visualisation de données pour m'aider à choisir un modelèle. Pour cela j'ai choisis les metrique et fait moi la matrice de confusion, le f1 score, le nombre de doublons, le nombre d'email de phising et réel, le nombre de valeurs manquant
+**output**  le code python qui m'affiche des tableaux:
+📋 TABLEAU COMPARATIF :
+                        Model Name  Precision  Recall (TPR)  F1-Score  F2-Score      MCC    PR-AUC   ROC-AUC  FPR @ 95% Recall
+      Baseline (Al-Subaiey et al.)     0.8412        0.9350    0.8856    0.9146   0.8640    0.9577    0.9899            0.0459
+   Cross-Corpus (Test sur CEAS_08)     0.5203        0.5944    0.5549    0.5780   0.4638    0.5804    0.8634            0.5086
+Sous Attaque (Adversarial Evasion)     0.7605        0.5604    0.6453    0.5915   0.5982    0.7064    0.8779            0.3942
+
