@@ -13,7 +13,13 @@ the table at the end, so that no AI-generated code is left undeclared.
 | I-3 | Imene | M4 | AutoML v0.1: search space, recovery of a stopped search, reproducibility | #6, #7, #8 |
 | F-1 | Florian | _to fill_ | _to fill_ | |
 | A-1 | Ambroise | _to fill_ | _to fill_ | |
+| A-2 | Ambroise | _to fill_ | _to fill_ | |
+| A-3 | Ambroise | _to fill_ | _to fill_ | |
+| A-4 | Ambroise | _to fill_ | _to fill_ | |
 | D-1 | Dylan | _to fill_ | _to fill_ | |
+| D-2 | Dylan | _to fill_ | _to fill_ | |
+| D-3 | Dylan | _to fill_ | _to fill_ | |
+| D-4 | Dylan | _to fill_ | _to fill_ | |
 
 ---
 
