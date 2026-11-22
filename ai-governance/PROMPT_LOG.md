@@ -145,28 +145,69 @@ nested LOSO.
 > TODO (Ambroise): same format as above. Your scripts `metrics_evaluation.py`, `data_profiler.py` and
 > `demo_metrics.py` are a natural candidate if an AI helped write them.
 
-**Author:** Ambroise · **Date:** · **Module:**
+### A-1: visualisation data
+**Author**: Ambroise  **Date:** 2026-11-18
 
-**Prompt:**
+**Prompt:** fait moi un code qui permet de faire de la visualisation de données pour m'aider à choisir un modelèle. Pour cela j'ai choisis les metrique et fait moi la matrice de confusion, le f1 score, le nombre de doublons, le nombre d'email de phising et réel, le nombre de valeurs manquant
+**output**  le code python qui m'affiche des tableaux:
+📋 TABLEAU COMPARATIF :
+                        Model Name  Precision  Recall (TPR)  F1-Score  F2-Score      MCC    PR-AUC   ROC-AUC  FPR @ 95% Recall
+      Baseline (Al-Subaiey et al.)     0.8412        0.9350    0.8856    0.9146   0.8640    0.9577    0.9899            0.0459
+   Cross-Corpus (Test sur CEAS_08)     0.5203        0.5944    0.5549    0.5780   0.4638    0.5804    0.8634            0.5086
+Sous Attaque (Adversarial Evasion)     0.7605        0.5604    0.6453    0.5915   0.5982    0.7064    0.8779            0.3942
 
-**AI output:**
+### A-2: metrics_evaluation.py
 
-**What I verified:**
+### A-3: metrics_evaluation.py
+
+### A-4: metrics_evaluation.py
 
 ---
 
 ## Dylan
 
-### D-1: _title_
-> TODO (Dylan): same format as above.
+### D-1: Data leakage verification 
+**Author:** Dylan · **Date:** 2026-11-22
 
-**Author:** Dylan · **Date:** · **Module:**
+**Prompt:** *"You are an expert data analyst. Within the code, can you catch any data leakage?"*
 
-**Prompt:**
+**AI output:** "I found no direct train-to-test leakage in the main hold-out path (01, 02, 04, 05, 05c). There are several softer leaks and fragilities, mostly in the leave-one-source-out (LOSO) evaluation.
 
-**AI output:**
+#### What is clean
+- **Dedup and split:** Near-duplicate clusters are removed before splitting, and `02_split.py` asserts that no cluster or normalised text crosses the split.
+- **Vectorizers:** They are fitted on the training fold only. This holds in 04 (CV, final fit, LOSO) and in 05 (`fold_features` fits on `folds[k][0]`).
+- **Model selection:** C in 04 and the Optuna search in 05 use only the training split. Test is touched only after selection.
+- **Shortcut test (03):** It uses training data only, with scalers and vectorizers inside the CV pipelines.
 
-**What I verified:**
+#### Flaws analysis
+
+**1. LOSO uses hyperparameters selected on the held-out source (05, 05c, 04)**
+- This is the most significant issue. C in 04 and the whole AutoML config in 05 were selected by CV on training data from all six sources.
+- Then LOSO claims to measure generalisation to an unseen source, but the held-out source's training-split rows already influenced the choice of model family, n-grams, masking, C and so on.
+- Your docstring acknowledges this. In practice it means LOSO numbers are optimistic, particularly for the AutoML model, which has far more selected degrees of freedom than the baseline's single C. So the AutoML-vs-baseline LOSO comparison is biased in favour of AutoML.
+- The fix is nested LOSO selection, as planned for v0.2.
+
+**2. The 04 near-duplicate inflation experiment reuses `best_C`**
+- `best_C` was chosen using the main train split, which overlaps with the new random-split test rows (`m_te`). It is one scalar in a diagnostic, so the impact is small, but those rows are not truly unseen.
+
+**3. Fragile positional alignment of `split.csv`**
+- Every script does `df[split.split.values == "train"]`. That relies on `corpus.parquet` having exactly the same row order as when `02_split.py` ran.
+- If 01 is re-run with any change in dedup order, the train/test labels silently misalign and you get real leakage with no error. The assertions in 02 only run at split time.
+- Fix: merge on `(source, row_in_source)` and assert the cluster disjointness check in every downstream script.
+
+**4. Dedup guarantees are only as good as the clustering threshold**
+- The disjointness assertion covers only the clusters your algorithm found. Near-duplicates below the similarity cutoff (templated spam, forwarded or quoted Enron threads, Nigerian-fraud variants) can still straddle train/test and across sources in LOSO.
+- A quick empirical check is to compute nearest-neighbour cosine similarity from each test email to the train set and look at the upper tail.
+
+**5. Selection optimism and post-hoc choices in 05b**
+- `cv_f1` is the best of 34 trials chosen on one 20k subsample with 3 folds, so it is biased upward. Don't report it as an estimate of performance.
+- The tie-break "in favour of ridge_lsq as recorded" is a manual choice. Make sure it was fixed before looking at any test or LOSO result. Scores tied at 4 decimals are essentially noise-level differences. Also check that run 1's test results did not influence the decision to restart with the modified search space.
+- The replay-consistency check compares only the model family, so it is a weak check. The recomputed CV F1 is the real verification.
+
+**6. Repeated use of the test set**
+- 05 prints hold-out results for all families, 05c re-evaluates, and 04 shows test diagnostics. Selection is by CV, so nothing is leaking in code. But if you ever pick or tweak anything after seeing those numbers, the test set stops being a clean estimate."
+
+**What we verified:** that data-leakage hasn't escaped our vigilance and slipped into the code.
 
 ---
 
@@ -190,13 +231,45 @@ check was the configuration saved and evaluated.
 
 ---
 
-## visualisation data
-**Auteur**: Ambroise
-**promt:** fait moi un code qui permet de faire de la visualisation de données pour m'aider à choisir un modelèle. Pour cela j'ai choisis les metrique et fait moi la matrice de confusion, le f1 score, le nombre de doublons, le nombre d'email de phising et réel, le nombre de valeurs manquant
-**output**  le code python qui m'affiche des tableaux:
-📋 TABLEAU COMPARATIF :
-                        Model Name  Precision  Recall (TPR)  F1-Score  F2-Score      MCC    PR-AUC   ROC-AUC  FPR @ 95% Recall
-      Baseline (Al-Subaiey et al.)     0.8412        0.9350    0.8856    0.9146   0.8640    0.9577    0.9899            0.0459
-   Cross-Corpus (Test sur CEAS_08)     0.5203        0.5944    0.5549    0.5780   0.4638    0.5804    0.8634            0.5086
-Sous Attaque (Adversarial Evasion)     0.7605        0.5604    0.6453    0.5915   0.5982    0.7064    0.8779            0.3942
+## Data leakage verification 
+**Author:** Dylan · **Date:** 2026-11-22
 
+**Prompt:** *"You are an expert data analyst. Within the code, can you catch any data leakage?"*
+
+**AI output:** "I found no direct train-to-test leakage in the main hold-out path (01, 02, 04, 05, 05c). There are several softer leaks and fragilities, mostly in the leave-one-source-out (LOSO) evaluation.
+
+### What is clean
+- **Dedup and split:** Near-duplicate clusters are removed before splitting, and `02_split.py` asserts that no cluster or normalised text crosses the split.
+- **Vectorizers:** They are fitted on the training fold only. This holds in 04 (CV, final fit, LOSO) and in 05 (`fold_features` fits on `folds[k][0]`).
+- **Model selection:** C in 04 and the Optuna search in 05 use only the training split. Test is touched only after selection.
+- **Shortcut test (03):** It uses training data only, with scalers and vectorizers inside the CV pipelines.
+
+### Leakage and contamination risks
+
+**1. LOSO uses hyperparameters selected on the held-out source (05, 05c, 04)**
+- This is the most significant issue. C in 04 and the whole AutoML config in 05 were selected by CV on training data from all six sources.
+- Then LOSO claims to measure generalisation to an unseen source, but the held-out source's training-split rows already influenced the choice of model family, n-grams, masking, C and so on.
+- Your docstring acknowledges this. In practice it means LOSO numbers are optimistic, particularly for the AutoML model, which has far more selected degrees of freedom than the baseline's single C. So the AutoML-vs-baseline LOSO comparison is biased in favour of AutoML.
+- The fix is nested LOSO selection, as planned for v0.2.
+
+**2. The 04 near-duplicate inflation experiment reuses `best_C`**
+- `best_C` was chosen using the main train split, which overlaps with the new random-split test rows (`m_te`). It is one scalar in a diagnostic, so the impact is small, but those rows are not truly unseen.
+
+**3. Fragile positional alignment of `split.csv`**
+- Every script does `df[split.split.values == "train"]`. That relies on `corpus.parquet` having exactly the same row order as when `02_split.py` ran.
+- If 01 is re-run with any change in dedup order, the train/test labels silently misalign and you get real leakage with no error. The assertions in 02 only run at split time.
+- Fix: merge on `(source, row_in_source)` and assert the cluster disjointness check in every downstream script.
+
+**4. Dedup guarantees are only as good as the clustering threshold**
+- The disjointness assertion covers only the clusters your algorithm found. Near-duplicates below the similarity cutoff (templated spam, forwarded or quoted Enron threads, Nigerian-fraud variants) can still straddle train/test and across sources in LOSO.
+- A quick empirical check is to compute nearest-neighbour cosine similarity from each test email to the train set and look at the upper tail.
+
+**5. Selection optimism and post-hoc choices in 05b**
+- `cv_f1` is the best of 34 trials chosen on one 20k subsample with 3 folds, so it is biased upward. Don't report it as an estimate of performance.
+- The tie-break "in favour of ridge_lsq as recorded" is a manual choice. Make sure it was fixed before looking at any test or LOSO result. Scores tied at 4 decimals are essentially noise-level differences. Also check that run 1's test results did not influence the decision to restart with the modified search space.
+- The replay-consistency check compares only the model family, so it is a weak check. The recomputed CV F1 is the real verification.
+
+**6. Repeated use of the test set**
+- 05 prints hold-out results for all families, 05c re-evaluates, and 04 shows test diagnostics. Selection is by CV, so nothing is leaking in code. But if you ever pick or tweak anything after seeing those numbers, the test set stops being a clean estimate."
+
+**What we verified:** that data-leakage hasn't escaped our vigilance and slipped into the code.
