@@ -60,7 +60,10 @@ style = pd.DataFrame(
         "pct_spaced_punct": df.groupby("source")["body"].apply(lambda s: s.str.contains(r" [.,:] ").mean() * 100),
     }
 ).reindex(C.SOURCES).round(2)
-years = pd.to_datetime(df["date"], errors="coerce", utc=True, format="mixed").dt.year
+# Strip trailing RFC 2822 zone comments like "+0100 (CET)": the numeric offset already carries
+# the information, and pandas 2.x crashes on them (parses "CET" as tzlocal).
+dates = df["date"].str.replace(r"\s*\([^)]*\)\s*$", "", regex=True)
+years = pd.to_datetime(dates, errors="coerce", utc=True, format="mixed").dt.year
 df["year"] = years
 yr = df.groupby("source")["year"].agg(
     year_p05=lambda s: s.quantile(0.05), year_median="median", year_p95=lambda s: s.quantile(0.95), pct_unparsed=lambda s: s.isna().mean() * 100
