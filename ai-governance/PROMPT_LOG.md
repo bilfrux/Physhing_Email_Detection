@@ -112,5 +112,10 @@ check was the configuration saved and evaluated.
 ## visualisation data
 **Auteur**: Ambroise
 **promt:** fait moi un code qui permet de faire de la visualisation de données pour m'aider à choisir un modelèle. Pour cela j'ai choisis les metrique et fait moi la matrice de confusion, le f1 score, le nombre de doublons, le nombre d'email de phising et réel, le nombre de valeurs manquant
-**output**  le code python qui m'affiche des tableaux
+**output**  le code python qui m'affiche des tableaux:
+📋 TABLEAU COMPARATIF :
+                        Model Name  Precision  Recall (TPR)  F1-Score  F2-Score      MCC    PR-AUC   ROC-AUC  FPR @ 95% Recall
+      Baseline (Al-Subaiey et al.)     0.8412        0.9350    0.8856    0.9146   0.8640    0.9577    0.9899            0.0459
+   Cross-Corpus (Test sur CEAS_08)     0.5203        0.5944    0.5549    0.5780   0.4638    0.5804    0.8634            0.5086
+Sous Attaque (Adversarial Evasion)     0.7605        0.5604    0.6453    0.5915   0.5982    0.7064    0.8779            0.3942
 
