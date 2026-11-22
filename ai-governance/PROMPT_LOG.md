@@ -72,7 +72,7 @@ corpus by corpus.
 ## Florian
 
 ### F-1: AutoML v0.1, recovery of a stopped search, and reproducibility check
-**Author:** Imene · **Dates:** 2026-11-18, 2026-11-22 · **Module:** M4 AutoML (+ reproducibility of the whole pipeline)
+**Author:** Florian · **Dates:** 2026-11-18, 2026-11-22 · **Module:** M4 AutoML (+ reproducibility of the whole pipeline)
 
 **Prompt 1, search space and objective:** *"AutoML v0.1 with Optuna: search jointly preprocessing
 (masking on/off), features (word n-grams, char n-grams, hand-crafted stats scaled with MaxAbs, chi2
@@ -289,7 +289,7 @@ If I had to pick one path: force char n-grams on, add the normalization and stru
 
 **AI output:** `features_char.py`, `text_norm.py`, `obfuscate.py`, `data_io.py`, `05_automl_v02_char.py`, `05d_eval_char.py`
 
-**What we verified:** an attempt to correct the flaw; we didn't keep the draft because of compatibility issues (the code was generated on partial context).
+**What we verified:** an attempt to correct the flaw; we didn't keep the draft because of compatibility issues (the code was generated on partial context) and we decided to keep the model simpler without these implementations.
 
 
 ---

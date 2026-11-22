@@ -23,7 +23,7 @@ corresponding module.
 
 | Member | Module owned | Module reviewed | PROMPT_LOG entries | AI_AUDIT entries |
 |---|---|---|---|---|
-| Imene Khelil | | | I-1, I-2, I-3 | #1–#12 |
-| Florian | | | F-1 (to write) | (to write) |
-| Ambroise | M1 | | A-1 (to write) | #14–#16 |
-| Dylan | | | D-1 (to write) | (to write) |
+| Imene Khelil | | | I-1, I-2, I-3 | #1–#5, #9-#12 |
+| Florian | | | F-1 | #6, #7, #8 |
+| Ambroise | M1 | | A-1, A-2 | #14–#16 |
+| Dylan | | | D-1, D-2, D-3, D-4 | #13 |
