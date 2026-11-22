@@ -6,21 +6,6 @@ produced, and what **the author** verified or changed. Prompts were written in F
 translated here; the original wording is kept in brackets. Smaller AI-assisted work is disclosed in
 the table at the end, so that no AI-generated code is left undeclared.
 
-| ID | Author | Module | Topic | Linked AI_AUDIT items |
-|---|---|---|---|---|
-| I-1 | Imene | M1 / M2 | From a bare prompt to a constrained, leakage-safe preprocessing plan | #1, #2, #5 |
-| I-2 | Imene | M2 / M3 | Shortcut test, baseline, metric choice and calibration | #3, #4 |
-| I-3 | Imene | M4 | AutoML v0.1: search space, recovery of a stopped search, reproducibility | #6, #7, #8 |
-| F-1 | Florian | _to fill_ | _to fill_ | |
-| A-1 | Ambroise | _to fill_ | _to fill_ | |
-| A-2 | Ambroise | _to fill_ | _to fill_ | |
-| A-3 | Ambroise | _to fill_ | _to fill_ | |
-| A-4 | Ambroise | _to fill_ | _to fill_ | |
-| D-1 | Dylan | _to fill_ | _to fill_ | |
-| D-2 | Dylan | _to fill_ | _to fill_ | |
-| D-3 | Dylan | _to fill_ | _to fill_ | #13 |
-| D-4 | Dylan | _to fill_ | _to fill_ | |
-
 ---
 
 ## Imene
@@ -84,7 +69,9 @@ corpus by corpus.
 
 ---
 
-### I-3: AutoML v0.1, recovery of a stopped search, and reproducibility check
+## Florian
+
+### F-1: AutoML v0.1, recovery of a stopped search, and reproducibility check
 **Author:** Imene · **Dates:** 2026-11-18, 2026-11-22 · **Module:** M4 AutoML (+ reproducibility of the whole pipeline)
 
 **Prompt 1, search space and objective:** *"AutoML v0.1 with Optuna: search jointly preprocessing
@@ -124,24 +111,6 @@ Problems caught: unbounded search with a diverging linear SVM (AI_AUDIT #6), ver
 parsing and a wrong `pip` diagnosis (AI_AUDIT #7), a recovery step that was not reproducible on
 another machine (AI_AUDIT #8). Limit stated: the selection objective is in-distribution → v0.2
 nested LOSO.
-
----
-
-## Florian
-
-### F-1: _title_
-> TODO (Florian): one high-stakes interaction **you** had with an AI for your module. Same format:
-> date, module, **exact prompt** (original wording in brackets if in French), what the AI produced,
-> what **you** checked or changed, and the AI_AUDIT item it is linked to. Do not copy another
-> member's entry.
-
-**Author:** Florian · **Date:** · **Module:**
-
-**Prompt:**
-
-**AI output:**
-
-**What I verified:**
 
 ---
 
