@@ -152,3 +152,34 @@ with `run_all.sh`.
 | **How we caught it** | Rereading the code, prompts, and outputs we realized this flaw. |
 | **Fix** | Using character n-grams to approximate words with different spellings. |
 
+Voici les nouvelles entrées (items **14 à 16**) rédigées dans le même format de tableau que le reste de `AI_AUDIT.md` :
+
+
+## 14. Loading only a single CSV instead of concatenating all source CSVs in a Python loop
+
+|  |  |
+| --- | --- |
+| **AI output** | Data-loading snippet that read/kept only one CSV file rather than iterating over the source files and concatenating them with `pd.concat`. |
+| **Flaw** | Only one CSV file was loaded into the DataFrame, silently dropping the rest of the corpus/sources before downstream processing. |
+| **How we caught it** | Inspecting the loaded DataFrame / source counts and reviewing the CSV-loading loop. |
+| **Fix** | Iterated over the target CSV files in a Python loop and concatenated the resulting DataFrames with `pd.concat` (keeping `ignore_index=True` / source tracking as needed). |
+
+## 15. Brute non-ASCII stripping in `text.py` without Unicode normalisation
+
+|  |  |
+| --- | --- |
+| **AI output (`src/phish/text.py`)** | `_NONWORD = re.compile(r"[^a-z0-9 ]+")` and `re.sub(r"[^a-z0-9]+", " ", s)` applied directly without Unicode normalisation (e.g. NFKD / transliteration). |
+| **Flaw** | Strips diacritics and non-Latin scripts outright: accented words get split/mangled (e.g., French/Spanish `répondez` → `r pondez`), and mostly non-ASCII messages lose almost all of their text. |
+| **How we caught it** | Inspecting cleaned text on accented/non-Latin examples and checking `scripts/09_sensitivity_checks.py` (`check_nazario_nonascii.csv`). |
+| **Evidence / Nuance** | Sensitivity checks on Nazario showed only 27 e-mails (1.9 %) were mostly non-ASCII (recall 0.41 vs 0.58), shifting overall Nazario recall by only ~0.3 percentage points — so it was not the main driver of Nazario recall, though it still corrupts accented/non-Latin tokens. |
+| **Fix** | Apply Unicode normalisation/transliteration before stripping non-word characters, and verify impact on accented/non-Latin tokens and per-source metrics. |
+
+## 16. Incomplete URL/query-string masking, pre-cleaning truncation, and 2,000-element limit in `clean_text()`
+
+|  |  |
+| --- | --- |
+| **AI output (`clean_text`)** | `_URL` matching only `http(s)://` and `www.`, `_URL_SPACED` without spacing around `?`, `=`, `&`, `str.slice(0, C.MAX_CHARS)` (`20,000` chars) applied *before* text cleaning, and a **2,000-element limit**. |
+| **Flaw** | (a) Naked domains without `http(s)://` or `www.` (e.g., `[paypal-secure.com/login](https://paypal-secure.com/login)`) slip past `_URL`. (b) `_URL_SPACED` does not handle spaces around `?`, `=`, or `&` in pre-tokenised query strings (e.g., `? id = 123`), leaving query artefacts in plain text. (c) Slicing to `C.MAX_CHARS` (20,000 characters) *before* cleaning can cut off the main message if a long HTML/CSS block sits at the top. (d) The **2,000-element limit** can cap or truncate elements if a batch/input exceeds that count. |
+| **How we caught it** | Auditing `clean_text()` regex coverage on bare domains and spaced query strings, and checking character/element bounds in the cleaning logic. |
+| **Evidence / Nuance** | With the current dataset, neither the HTML/CSS pre-cleaning truncation nor the 2,000-element limit causes an issue / impact (not triggered on the current data), so no immediate breakage occurs here — **however**, both must be kept in mind for future improvements and larger or HTML-heavy datasets. |
+| **Fix** | Extend URL/query-string patterns to cover bare domains and spaced `?`/`=`/`&` tokens, and keep both the pre-cleaning `20,000`-char slice and the `2,000`-element limit on the radar for future improvements (see also #1 and #9). |
