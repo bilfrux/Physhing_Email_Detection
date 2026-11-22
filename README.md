@@ -3,7 +3,7 @@
 ESILV Machine Learning 2026 project (major OCC). Team: Imene Khelil, Florian, Ambroise, Dylan.
 
 **Week 2 deliverable:** raw-data audit, learning/testing plan, baseline, state-of-the-art benchmark,
-AutoML v0.1. Report: `reports/latex/main.pdf` (LaTeX source in `reports/latex/`).
+AutoML v0.1. Report: `reports/latex/rapport.pdf` (short version, the one we submit) and `reports/latex/main.pdf` (long version with every table).
 
 ## Key results (Week 2)
 
@@ -29,7 +29,7 @@ Numbers regenerated with `run_all.sh` in the pinned environment; 95 % confidence
 python3.13 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
 # put the six raw CSVs in data/raw/ (see data/README.md)
 PATH="$PWD/.venv/bin:$PATH" bash run_all.sh   # ~1 h 30 on a laptop; every table/figure is regenerated
-cd reports/latex && latexmk -pdf main.tex
+cd reports/latex && tectonic rapport.tex   # or latexmk -pdf rapport.tex
 ```
 
 | Script | Guideline step | Output |

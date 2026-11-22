@@ -12,6 +12,5 @@ optuna==5.1.0
 datasketch==2.0.0
 pyarrow==26.0.1
 
-# Exploratory tools (data_profiler.py, metrics_evaluation.py) and dataset download (importdataset.py)
-seaborn==0.13.2
+# Dataset download (importdataset.py)
 kagglehub==0.3.13

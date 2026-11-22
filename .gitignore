@@ -23,3 +23,6 @@ reports/latex/*.synctex.gz
 
 # Kaggle download location (importdataset.py / demo_metrics.py)
 phishing-email-dataset/
+
+# Word lock files
+~$*
